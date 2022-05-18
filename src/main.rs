@@ -6,8 +6,8 @@ use key_generator::GenMode;
 /// Key Generator
 #[derive(Parser, Debug)]
 #[clap(
-    author = "shahow",
-    version = "1.0.0",
+    author,
+    version,
     about = "Key Generator",
     long_about = "Simple program to Key Generator"
 )]
