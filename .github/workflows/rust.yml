@@ -11,6 +11,8 @@ env:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Create Release
         id: create_release
@@ -22,9 +24,6 @@ jobs:
           release_name: v0.1.1
           draft: false
           prerelease: false
-      - name: upload_url
-        id: upload_url
-        run: echo ${{ steps.create_release.outputs.upload_url }}
 
   build:
     runs-on: ubuntu-latest
@@ -40,7 +39,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.SHAHOW_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
         asset_path: ./target/release/key_generator
         asset_name: key_generator
         asset_content_type: application
