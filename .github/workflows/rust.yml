@@ -2,14 +2,14 @@ name: Rust
 
 on:
   push:
-    tags:
-      - v*
+    branchs:
+      - main
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create-release:
+  init:
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -25,6 +25,13 @@ jobs:
           draft: false
           prerelease: false
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        id: test
+        run: echo ${{ needs.init.outputs.upload_url }}
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +46,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.SHAHOW_TOKEN }}
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        upload_url: ${{ needs.init.outputs.upload_url }}
         asset_path: ./target/release/key_generator
         asset_name: key_generator
         asset_content_type: application
