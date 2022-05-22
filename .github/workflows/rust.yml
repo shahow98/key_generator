@@ -9,7 +9,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create_release:
+  create-release:
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
